@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+require "matrix"
+require "tf-idf-similarity"
 require "httparty"
 require "json"
 require "rumors/api/client/version"
