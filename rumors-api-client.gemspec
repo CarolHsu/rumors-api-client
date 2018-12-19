@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q(a api client to "https://cofacts.g0v.tw/")
   spec.description   = %q(check line rumors, base on database of `cofacts` (g0v project))
-  spec.homepage      = "github.com/carolhsu/rumors-api-client"
+  spec.homepage      = "https://github.com/carolhsu/rumors-api-client"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
@@ -26,4 +26,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec", "~> 3.0"
   spec.add_development_dependency "httparty", "~> 0.16"
   spec.add_development_dependency "vcr", "~> 4.0"
+  spec.add_development_dependency "webmock", "~> 3.4"
 end
