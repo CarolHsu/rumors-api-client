@@ -3,14 +3,16 @@ module Rumors
     module Client
       class Base
         DATA_HOST = "https://cofacts-api.g0v.tw/graphql?"
-        SIMILARITY = 8.0
+        SIMILARITY = 0.8
 
         def initialize(text)
-          @text = text
+          @text = text.split.join("")
         end
 
         def search
           @articles = list_articles
+          return unless @articles.code == 200
+
           return_article
         end
 
@@ -25,15 +27,16 @@ module Rumors
           contents = parse_content
           most_like = calculate_similarity(contents)
           return unless most_like[:score] > SIMILARITY
+
           body = build_body('get_article_and_replies', most_like[:article_id])
           post_request(body)
         end
 
         def parse_content
-          parsed_articles = JSON.parse(@articles)
+          parsed_articles = JSON.parse(@articles.body)
           parsed_articles['data']['ListArticles']['edges'].map do |article|
             node = article['node']
-            Hash[node['id'], node['text']]
+            Hash[node['id'], TfIdfSimilarity::Document.new(node['text'])]
           end
         end
 
@@ -47,18 +50,17 @@ module Rumors
           original_text = TfIdfSimilarity::Document.new(@text)
 
           corpus = [original_text]
-
-          contents.each do |id, text|
-            eval("#{id} = TfIdfSimilarity::Document.new(#{text})")
-            corpus << eval(id)
+          contents.each do |h|
+            corpus << h.values.first
           end
 
           model = TfIdfSimilarity::TfIdfModel.new(corpus)
           matrix = model.similarity_matrix
 
-          contents.keys.each do |article_id|
-            score = matrix[model.document_index(original_text), model.document_index(eval(article_id))]
-            next unless score > most_like['score']
+          contents.each do |h|
+            article_id, text = h.to_a.flatten
+            score = matrix[model.document_index(original_text), model.document_index(text)]
+            next unless score > most_like[:score]
 
             most_like[:article_id] = article_id
             most_like[:score] = score

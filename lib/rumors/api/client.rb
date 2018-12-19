@@ -6,6 +6,7 @@ require "json"
 require "rumors/api/client/version"
 require "rumors/api/client/base"
 require "rumors/api/client/utils/list_articles"
+require "rumors/api/client/utils/get_article_and_replies"
 
 module Rumors
   module Api
