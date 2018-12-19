@@ -1,6 +1,7 @@
 require "bundler/setup"
 require "vcr"
 require "webmock"
+require "pry"
 require "rumors/api/client"
 
 RSpec.configure do |config|
