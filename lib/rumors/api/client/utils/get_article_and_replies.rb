@@ -16,7 +16,7 @@ module Rumors
           def gql_query
             <<-GQL
             {
-                GetArticle(id: "AVqR8SZlyrDaTqlmmp9Z") {
+                GetArticle(id: "#{@id}") {
                     id
                     text
                     articleReplies {
