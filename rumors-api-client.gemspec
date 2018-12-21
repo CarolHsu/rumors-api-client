@@ -21,8 +21,8 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = %w(lib)
 
-  spec.add_development_dependency "httparty", "~> 0.16"
-  spec.add_development_dependency "tf-idf-similarity", "~> 0.1"
+  spec.add_dependency "httparty", "~> 0.16"
+  spec.add_dependency "tf-idf-similarity", "~> 0.1"
   spec.add_development_dependency "bundler", "~> 1.16"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.0"
