@@ -1,8 +1,10 @@
 # Rumors::Api::Client
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/rumors/api/client`. To experiment with that code, run `bin/console` for an interactive prompt.
+All credit belongs to [@cofacts](https://github.com/cofacts), appreciate all efforts they have done time to time for the line rumors.
 
-TODO: Delete this and the text above, and describe your gem
+This Ruby api Client which is based on Cofacts database and the provided GraphQL, to let you search high relevant rumor results easily.
+
+Visit [真的假的 Cofacts](https://beta.hackfoldr.org/cofacts), to become one of contributors!
 
 ## Installation
 
@@ -41,7 +43,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/rumors-api-client. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/carolhsu/rumors-api-client. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 ## License
 
