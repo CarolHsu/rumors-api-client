@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rumors-api-client (0.1.0)
+    rumors-api-client (0.1.2)
 
 GEM
   remote: https://rubygems.org/
