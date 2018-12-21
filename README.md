@@ -1,6 +1,6 @@
 # Rumors::Api::Client
 
-All credits belongs to [@cofacts](https://github.com/cofacts), appreciate all efforts they have done time to time for the line rumors.
+All credit belongs to [@cofacts](https://github.com/cofacts), appreciate all efforts they have done time to time for the line rumors.
 
 This Ruby api Client which is based on Cofacts database and the provided GraphQL, to let you search high relevant rumor results easily.
 
