@@ -11,12 +11,16 @@ module Rumors
             gql_query.strip
           end
 
+          def variables
+            { id: "#{@id}" }
+          end
+
           private
 
           def gql_query
             <<-GQL
-            {
-                GetArticle(id: "#{@id}") {
+            query get_article($id: String) {
+                GetArticle(id: $id) {
                     id
                     text
                     articleReplies {
