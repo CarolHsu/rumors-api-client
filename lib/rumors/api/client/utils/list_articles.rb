@@ -11,13 +11,17 @@ module Rumors
             gql_query.strip
           end
 
+          def variables
+            { text: "#{@text}" }
+          end
+
           private
 
           def gql_query
             <<-GQL
-            {
+            query list_articles($text: String) {
                 ListArticles(
-                    filter: { moreLikeThis: { like: "#{@text}"  } }
+                    filter: { moreLikeThis: { like: $text } }
                     orderBy: [{ _score: DESC  }]
                     first: 4
                 ) {
@@ -27,7 +31,7 @@ module Rumors
                             text
                         }
                     }
-                 }
+                }
             }
             GQL
           end

@@ -84,9 +84,11 @@ module Rumors
         end
 
         def build_body(util, argument)
-          current_util = "rumors/api/client/utils/#{util}".classify
+          current_util_class = "rumors/api/client/utils/#{util}".classify
+          current_util = Object.const_get(current_util_class).new(argument)
           {
-            query: eval(current_util).new(argument).purify_gql_query,
+            query: current_util.purify_gql_query,
+            variables: current_util.variables
           }
         end
       end
