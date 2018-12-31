@@ -28,8 +28,11 @@ module Rumors
           most_like = calculate_similarity(contents)
           return unless most_like[:score] > SIMILARITY
 
-          body = build_body('get_article_and_replies', most_like[:article_id])
-          post_request(body)
+          find_article(most_like[:article_id])
+        end
+
+        def find_article(article_id)
+          @articles['data']['ListArticles']['edges'].select { |h, v| h['node']['id'] == article_id }.first['node']
         end
 
         def parse_content
@@ -44,7 +47,7 @@ module Rumors
           # NOTE: https://github.com/jpmckinney/tf-idf-similarity
           most_like = {
             article_id: '',
-            score: 0,
+            score: 0
           }
 
           original_text = TfIdfSimilarity::Document.new(@text)

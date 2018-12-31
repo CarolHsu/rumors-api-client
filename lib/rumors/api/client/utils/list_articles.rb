@@ -12,26 +12,34 @@ module Rumors
           end
 
           def variables
-            { text: "#{@text}" }
+            { text: @text.to_s }
           end
 
           private
 
           def gql_query
             <<-GQL
-            query list_articles($text: String) {
-                ListArticles(
-                    filter: { moreLikeThis: { like: $text } }
-                    orderBy: [{ _score: DESC  }]
-                    first: 4
-                ) {
-                    edges {
-                        node {
-                            id
-                            text
-                        }
+            query($text: String) {
+              ListArticles(
+                filter: { moreLikeThis: { like: $text } }
+                orderBy: [{ _score: DESC }]
+                first: 4
+              ) {
+                edges {
+                  node {
+                    id
+                    text
+                    articleReplies {
+                      reply {
+                        id
+                        text
+                        type
+                        reference
+                      }
                     }
+                  }
                 }
+              }
             }
             GQL
           end
