@@ -23,7 +23,7 @@ RSpec.describe Rumors::Api::Client::Base do
     it 'should search the most high relevant article and replies' do
       VCR.use_cassette('article_integration_test') do
         response = subject.search
-        expect(response.code).to eq(200)
+        expect(response.keys).to eq(%w(id text articleReplies))
       end
     end
   end
@@ -33,14 +33,6 @@ RSpec.describe Rumors::Api::Client::Base do
       it 'should return hash with query' do
         body = subject.send(:build_body, 'list_articles', text)
         expected_body = Rumors::Api::Client::Utils::ListArticles.new(text).purify_gql_query
-        expect(body[:query]).to eq(expected_body)
-      end
-    end
-
-    context 'as get_article_and_replies' do
-      it 'should return hash with query' do
-        body = subject.send(:build_body, 'get_article_and_replies', text)
-        expected_body = Rumors::Api::Client::Utils::GetArticleAndReplies.new(text).purify_gql_query
         expect(body[:query]).to eq(expected_body)
       end
     end
@@ -84,23 +76,6 @@ RSpec.describe Rumors::Api::Client::Base do
         expect(response).to be_nil
       end
     end
-
-    context 'score > 0.8' do
-      let(:article_id) { 'AVqR8SZlyrDaTqlmmp9Z' }
-      before :each do
-        rank = { article_id: article_id, score: 0.99 }
-        allow(subject).to receive(:calculate_similarity).and_return(rank)
-      end
-
-      it 'should return detail body of article' do
-        VCR.use_cassette('get_article_and_replies') do
-          response = subject.send(:return_article)
-          response_body = parsed_body(response)
-          article_details = response_body['data']['GetArticle']
-          expect(article_details['id']).to eq(article_id)
-        end
-      end
-    end
   end
 
   describe '#post_request' do
@@ -115,25 +90,6 @@ RSpec.describe Rumors::Api::Client::Base do
             record['node']['id']
           end
           expect(article_ids).to match_array %w(5658951254672-rumor AVsaogPGtKp96s659DcD mapwsl4yunp0 1xhezk7x6677d)
-        end
-      end
-    end
-
-    context 'with get_article_and_replies' do
-      let(:id) { 'AVqR8SZlyrDaTqlmmp9Z' }
-      it 'should get related response' do
-        VCR.use_cassette('get_article_and_replies') do
-          body = subject.send(:build_body, 'get_article_and_replies', id)
-          response = subject.send(:post_request, body)
-          expect(response.code).to eq(200)
-          response_body = parsed_body(response)
-          article_details = response_body['data']['GetArticle']
-          expect(article_details['id']).to eq(id)
-          expect(article_details['text']).not_to be_nil
-          first_reply = article_details['articleReplies'].first
-          expect(first_reply['reply']['text']).not_to be_nil
-          expect(first_reply['reply']['reference']).not_to be_nil
-          expect(first_reply['reply']['type']).to eq('RUMOR')
         end
       end
     end
