@@ -29,6 +29,9 @@ module Rumors
                   node {
                     id
                     text
+                    hyperlinks {
+                      url
+                    }
                     articleReplies {
                       reply {
                         id
