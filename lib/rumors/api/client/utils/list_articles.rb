@@ -18,7 +18,7 @@ module Rumors
           private
 
           def gql_query
-            <<-GQL
+            <<~GQL
             query($text: String) {
               ListArticles(
                 filter: { moreLikeThis: { like: $text } }
