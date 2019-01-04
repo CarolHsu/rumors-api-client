@@ -39,7 +39,9 @@ module Rumors
           parsed_articles = JSON.parse(@articles.body)
           parsed_articles['data']['ListArticles']['edges'].map do |article|
             node = article['node']
-            Hash[node['id'], TfIdfSimilarity::Document.new(node['text'])]
+            content = Hash[node['id'], TfIdfSimilarity::Document.new(node['text'])]
+            content['urls'] = node['hyperlinks'].nil? ? nil : node["hyperlinks"].map { |link| link["url"]  }
+            content
           end
         end
 
