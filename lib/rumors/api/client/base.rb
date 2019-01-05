@@ -6,7 +6,7 @@ module Rumors
         SIMILARITY = 0.8
 
         def initialize(text)
-          @text = text.split.join("")
+          @text = text.split.join(" ")
         end
 
         def search
