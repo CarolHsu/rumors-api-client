@@ -6,7 +6,8 @@ module Rumors
         SIMILARITY = 0.8
 
         def initialize(text)
-          @text = text.split.join("")
+          @text = text.strip
+          @urls = URI.extract(@text).map { |url| URI.parse(URI.escape(url)) }
         end
 
         def search
@@ -25,10 +26,18 @@ module Rumors
 
         def return_article
           contents = parse_content
-          most_like = calculate_similarity(contents)
-          return unless most_like[:score] > SIMILARITY
+          return if contents.nil? || contents.empty?
+          article_id = nil
 
-          find_article(most_like[:article_id])
+          if @urls.any?
+            article_id = compare_urls(contents)
+          else
+            most_like = calculate_similarity(contents)
+            return unless most_like[:score] > SIMILARITY
+            article_id = most_like[:article_id]
+          end
+
+          find_article(article_id) if article_id
         end
 
         def find_article(article_id)
@@ -36,11 +45,34 @@ module Rumors
         end
 
         def parse_content
+          # [{ 'article_id' => TfIdfSimilarity::Document(text), 'urls' => ["url"] }]
           parsed_articles = JSON.parse(@articles.body)
           parsed_articles['data']['ListArticles']['edges'].map do |article|
             node = article['node']
-            Hash[node['id'], TfIdfSimilarity::Document.new(node['text'])]
+            content = Hash[node['id'], TfIdfSimilarity::Document.new(node['text'])]
+            content['urls'] = node['hyperlinks'].nil? ? nil : node["hyperlinks"].map { |link| URI.parse(URI.escape(link["url"])) }
+            content
           end
+        end
+
+        def compare_urls(contents)
+          contents.each do |content|
+            return content.keys.first if exist_same_url?(content['urls'])
+          end
+        end
+
+        def exist_same_url?(response_urls)
+          response_urls.each do |response_url|
+            @urls.each do |url|
+              next unless response_url.host == url.host
+
+              response_uris = response_url.path.split("/").reject { |path| path.empty? }
+              uris = url.path.split("/").reject { |path| path.empty? }
+              return true if (response_uris & uris) == response_uris
+            end
+          end
+
+          false
         end
 
         def calculate_similarity(contents)
