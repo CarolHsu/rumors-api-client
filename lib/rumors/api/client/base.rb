@@ -59,6 +59,7 @@ module Rumors
           contents.each do |content|
             return content.keys.first if exist_same_url?(content['urls'])
           end
+          nil
         end
 
         def exist_same_url?(response_urls)
