@@ -21,7 +21,7 @@ RSpec.describe Rumors::Api::Client do
   it "get result" do
     VCR.use_cassette('article_integration_test') do
       response = Rumors::Api::Client.search(rumor)
-      expect(response.keys).to eq(%w(id text articleReplies))
+      expect(response.keys).to eq(%w(id text hyperlinks articleReplies))
     end
   end
 end
