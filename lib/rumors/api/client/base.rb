@@ -63,6 +63,8 @@ module Rumors
         end
 
         def exist_same_url?(response_urls)
+          return unless response_urls
+
           response_urls.each do |response_url|
             @urls.each do |url|
               next unless response_url.host == url.host
