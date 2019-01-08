@@ -23,7 +23,7 @@ RSpec.describe Rumors::Api::Client::Base do
     it 'should search the most high relevant article and replies' do
       VCR.use_cassette('article_integration_test') do
         response = subject.search
-        expect(response.keys).to eq(%w(id text articleReplies))
+        expect(response.keys).to eq(%w(id text hyperlinks articleReplies))
       end
     end
   end
@@ -40,7 +40,7 @@ RSpec.describe Rumors::Api::Client::Base do
 
   describe 'calculate_similarity' do
     let(:rumor) do
-      "全台首家獲得 Google 新聞 雙認證 二線電子新聞媒體，並列全台主流媒體新聞群，正式即時推播上線！兩岸報導 Google新聞（國際）認證獨立版 https://goo.gl/Jj5bWK一線版 https://goo.gl/6Ntguf八方新聞  Google新聞（地方）認證獨立版 https://goo.gl/kDetd7一線版 https://goo.gl/nzemyZ歡迎舊雨新知繼續支持～"
+      "明天早上3點至晚上7點，中國網絡開始清理整頓LINE，所有族群都不要發圖片和鏈接，一但群被清理，群裡所有手機號都將被控，很麻煩，望相互轉告。早安圖片明天休息一天"
     end
 
     before :each do
@@ -55,7 +55,7 @@ RSpec.describe Rumors::Api::Client::Base do
     it 'should return most similar article_id and score' do
       contents = subject.send(:parse_content)
       most_like = subject.send(:calculate_similarity, contents)
-      expect(most_like[:article_id]).to eq('1xhezk7x6677d')
+      expect(most_like[:article_id]).to eq('5658951254672-rumor')
     end
   end
 

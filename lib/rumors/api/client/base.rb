@@ -7,7 +7,7 @@ module Rumors
 
         def initialize(text)
           @text = text.strip
-          @urls = URI.extract(@text).map { |url| URI.parse(url) }
+          @urls = URI.extract(@text).map { |url| URI.parse(URI.escape(url)) }
         end
 
         def search
@@ -26,7 +26,7 @@ module Rumors
 
         def return_article
           contents = parse_content
-          return if contents.empty?
+          return if contents.nil? || contents.empty?
           article_id = nil
 
           if @urls.any?
@@ -50,7 +50,7 @@ module Rumors
           parsed_articles['data']['ListArticles']['edges'].map do |article|
             node = article['node']
             content = Hash[node['id'], TfIdfSimilarity::Document.new(node['text'])]
-            content['urls'] = node['hyperlinks'].nil? ? nil : node["hyperlinks"].map { |link| URI.parse(link["url"]) }
+            content['urls'] = node['hyperlinks'].nil? ? nil : node["hyperlinks"].map { |link| URI.parse(URI.escape(link["url"])) }
             content
           end
         end
