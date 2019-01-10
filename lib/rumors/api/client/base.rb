@@ -71,11 +71,19 @@ module Rumors
 
               response_uris = response_url.path.split("/").reject { |path| path.empty? }
               uris = url.path.split("/").reject { |path| path.empty? }
-              return true if (response_uris & uris) == response_uris
+              next unless equal_arrays?(response_uris, uris)
+              return true if url.query.nil?
+              querys = url.query.split('&')
+              response_querys = response_url.query.split('&')
+              return true if equal_arrays?(response_querys, querys)
             end
           end
 
           false
+        end
+
+        def equal_arrays?(this_one, another)
+          this_one.size == another.size && (this_one & another) == this_one
         end
 
         def calculate_similarity(contents)
